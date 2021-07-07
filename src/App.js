@@ -1,25 +1,54 @@
-import logo from './logo.svg';
-import './App.css';
+import React, { useState } from 'react'
+import { Container } from './component/StyleComponent'
+import TodoForm from './component/TodoForm'
+import TodoList from './component/TodoList'
 
-function App() {
+const App = () => {
+
+  const dummyData = [{
+    id: 1,
+    task: "Coding",
+    done: false,
+  }]
+
+  const [todo, setTodo] = useState(dummyData)
+
+  // add todo
+  const addTodo = (newTask) => {
+    const updateTodo = [...todo, {
+      id: Math.floor(Math.random() * 999),
+      task: newTask,
+      done: false,
+    }]
+    setTodo(updateTodo);
+  }
+
+  //  handlerCheck
+  const handlerCheckbox = (id) => {
+    const updateTodo = todo.map(item => {
+      return (
+        item.id === id ? { ...item, done: !item.done } : item)
+    })
+    setTodo(updateTodo);
+  }
+
+  const handlerDelete = id => {
+    const updatedTodo = todo.filter(item => {
+      return (
+        item.id !== id
+      );
+    })
+    setTodo(updatedTodo)
+  }
+
+ 
+
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
-  );
+      <Container>
+        <TodoForm addTodo={addTodo} />
+        <TodoList todo={todo} handlerCheckbox={handlerCheckbox} handlerDelete={handlerDelete} />
+      </Container>
+  )
 }
 
-export default App;
+export default App
